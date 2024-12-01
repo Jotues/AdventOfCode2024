@@ -22,7 +22,7 @@ Solution::Solution(const std::string& input)
     std::ranges::sort(first);
     std::ranges::sort(second);
 
-    for (auto i = 0; i < first.size(); i++)
+    for (size_t i = 0; i < first.size(); i++)
     {
         resultPart1 += abs(first[i] - second[i]);
     }
