@@ -2,6 +2,7 @@
 #include <utils_time.hh>
 #include <algorithm>
 #include <assert.h>
+#include <numeric>
 #include "Solution.hh"
 
 using namespace std;
