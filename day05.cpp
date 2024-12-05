@@ -17,30 +17,29 @@ Solution::Solution(const std::string& input)
 
     Data data;
 
-    size_t i = 0;
-    auto line = lines[i];
-    while (line !=  "") 
+    size_t indexForPart1 = 0;
+    auto line = lines[indexForPart1];
+    while (!line.empty()) 
     {
         auto num1 = std::stoul(line.substr(0, 2));
         auto num2 = std::stoul(line.substr(3));
-        printf("num1 = %u, num2 = %u\n", num1, num2);
-        line = lines[++i];
+        line = lines[++indexForPart1];
         if (data.contains(num1))
         {
             data[num1].insert(num2);
         }
         else
         {
-            data[num1] = std::set<uint16_t>{num2};
+            data[num1] = std::set<uint16_t>{ static_cast<uint16_t>(num2) };
         }
     }
 
-    line = lines[++i];
-    auto indexForPart2 = i;
+    line = lines[++indexForPart1];
+    auto indexForPart2 = indexForPart1;
     std::set<uint16_t> goodOrderLines;
 
     //part 1
-    while (line != "")
+    while (!line.empty())
     {
         std::vector<uint16_t> order;
         size_t j = 0;
@@ -52,24 +51,23 @@ Solution::Solution(const std::string& input)
             {
                 if (data[num].contains(el))
                 {
-                    // printf("Bad order - %u should be before %u\n", num, el);
                     badOrder = true;
                     break;
                 }
             }
-            order.push_back(num);
             if (badOrder)
             {
                 break;
             }
+            order.push_back(num);
             j += 3;
         }
         if (!badOrder)
         {
             resultPart1 += order[(order.size() - 1)/2];
-            goodOrderLines.insert(i);
+            goodOrderLines.insert(indexForPart1);
         }
-        line = lines[++i];
+        line = lines[++indexForPart1];
     }
 
     //part 2
@@ -85,7 +83,6 @@ Solution::Solution(const std::string& input)
 
         std::vector<uint16_t> order;
         size_t j = 0;
-        bool badOrder = false;
         while (j < line.size())
         {
             auto num = std::stoul(line.substr(j, 2));
@@ -93,23 +90,16 @@ Solution::Solution(const std::string& input)
             j += 3;
         }
 
-        utils::printRange(order);
-
         //sorting
         std::ranges::sort(order, [&data](uint16_t a, uint16_t b) {
-            if (data[b].contains(a))
-            {
-                return false;
-            }
-            return true;
+            return !data[b].contains(a);
         });
-        
+
         resultPart2 += order[(order.size() - 1)/2];
 
         line = lines[++indexForPart2];
     }
 
-    
     printResult(input);
 }
 
