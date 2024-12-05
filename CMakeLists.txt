@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(AdventOfCode2022 VERSION 0.1.0 LANGUAGES CXX)
+project(AdventOfCode2024 VERSION 0.1.0 LANGUAGES CXX)
 
 add_library(compiler_flags INTERFACE)
 target_compile_features(compiler_flags INTERFACE cxx_std_20)
@@ -26,9 +26,9 @@ add_executable(day04 day04.cpp)
 target_link_libraries(day04 utils compiler_flags)
 target_include_directories(day04 PUBLIC "${PROJECT_BINARY_DIR}")
 
-#add_executable(day05 day05.cpp)
-#target_link_libraries(day05 utils compiler_flags)
-#target_include_directories(day05 PUBLIC "${PROJECT_BINARY_DIR}")
+add_executable(day05 day05.cpp)
+target_link_libraries(day05 utils compiler_flags)
+target_include_directories(day05 PUBLIC "${PROJECT_BINARY_DIR}")
 
 #add_executable(day06 day06.cpp)
 #target_link_libraries(day06 utils compiler_flags)

@@ -58,7 +58,8 @@
         "regex": "cpp",
         "unordered_set": "cpp",
         "list": "cpp",
-        "format": "cpp"
+        "format": "cpp",
+        "set": "cpp"
     },
     "cmake.configureOnOpen": true,
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
