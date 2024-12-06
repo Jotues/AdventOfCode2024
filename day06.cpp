@@ -31,8 +31,8 @@ Solution::Solution(const std::string& input)
 
     utils::Grid<Node> grid(lines);
     utils::Point start {};
-    bool startFound { false };
 
+    bool startFound { false };
     for (auto i = 0u; i < grid.maxRows; i++)
     {
         for (auto j = 0u; j < grid.maxColumns; j++)
@@ -73,50 +73,41 @@ Solution::Solution(const std::string& input)
     resultPart1 = visited.size();
 
     //part 2
-    for (auto i = 0u; i < grid.maxRows; i++)
+    for (auto& pt: visited)
     {
-        for (auto j = 0u; j < grid.maxColumns; j++)
+        grid.getNode(pt.x, pt.y).val = '#';
+
+        current = start;
+        utils::Dir dir = utils::Dir::UP;
+        std:set<std::pair<utils::Point, utils::Dir>> changesMade;
+        while (true)
         {
-            if (grid.getNode(j, i).val != '.')
+            bool dirChanged = false;
+            auto nextPoint = current + utils::dirToPointArithmetic.at(dir);
+            if (!grid.isPointInGrid(nextPoint))
             {
-                continue;
+                break;
             }
-            auto gridCopy = grid;
-            gridCopy.getNode(j, i).val = '#';
-            
-            current = start;
-            utils::Dir dir = utils::Dir::UP;
-            std:set<std::pair<utils::Point, utils::Dir>> changesMade;
-            while (true)
+            while (grid.getNode(nextPoint.x, nextPoint.y).val == '#')
             {
-                bool dirChanged = false;
-                auto nextPoint = current + utils::dirToPointArithmetic.at(dir);
-                if (!gridCopy.isPointInGrid(nextPoint))
+                dir = dirChange.at(dir);
+                nextPoint = current + utils::dirToPointArithmetic.at(dir);
+                dirChanged = true;
+            }
+
+            if (dirChanged)
+            {
+                auto change = std::make_pair<utils::Point, utils::Dir>(utils::Point{current.x, current.y}, utils::Dir{dir});
+                auto [_, inserted] = changesMade.insert(change);
+                if (!inserted)
                 {
+                    resultPart2++;
                     break;
                 }
-                while (gridCopy.getNode(nextPoint.x, nextPoint.y).val == '#')
-                {
-                    dir = dirChange.at(dir);
-                    nextPoint = current + utils::dirToPointArithmetic.at(dir);
-                    dirChanged = true;
-                }
-                if (dirChanged)
-                {
-                    auto change = std::make_pair<utils::Point, utils::Dir>(utils::Point{current.x, current.y}, utils::Dir{dir});
-                    if (changesMade.contains(change))
-                    {
-                        resultPart2++;
-                        break;
-                    }
-                    else
-                    {
-                        changesMade.insert(change);
-                    }
-                }
-                current = nextPoint;
             }
+            current = nextPoint;
         }
+        grid.getNode(pt.x, pt.y).val = '.';
     }
 
     printResult(input);
