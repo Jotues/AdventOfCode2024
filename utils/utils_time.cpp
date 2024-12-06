@@ -21,7 +21,7 @@ void TaskTime::printTaskTimeMs()
 void TaskTime::printTaskTimeAll()
 {
     auto duration = duration_cast<milliseconds>(end - start).count();
-    auto miliseconds = duration;
+    auto miliseconds = duration % 1000;
     duration /= 1000;
     auto seconds = duration % 60;
     duration /= 60;
