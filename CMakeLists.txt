@@ -50,9 +50,9 @@ add_executable(day10 day10.cpp)
 target_link_libraries(day10 utils compiler_flags)
 target_include_directories(day10 PUBLIC "${PROJECT_BINARY_DIR}")
 
-#add_executable(day11 day11.cpp)
-#target_link_libraries(day11 utils compiler_flags)
-#target_include_directories(day11 PUBLIC "${PROJECT_BINARY_DIR}")
+add_executable(day11 day11.cpp)
+target_link_libraries(day11 utils compiler_flags)
+target_include_directories(day11 PUBLIC "${PROJECT_BINARY_DIR}")
 
 #add_executable(day12 day12.cpp)
 #target_link_libraries(day12 utils compiler_flags)
