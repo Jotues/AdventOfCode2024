@@ -81,7 +81,14 @@ namespace utils
     };
 
     constexpr std::array<Dir, 4> AllDirs = {Dir::UP, Dir::DOWN, Dir::LEFT, Dir::RIGHT};
-
+    
+    const std::map<Dir, std::string> dirToString
+    {
+        {Dir::UP, "UP"},
+        {Dir::DOWN, "DOWN"},
+        {Dir::LEFT, "LEFT"},
+        {Dir::RIGHT, "RIGHT"},
+    };
 }
 
 template<>
