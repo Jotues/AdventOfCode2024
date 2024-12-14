@@ -63,56 +63,54 @@ Solution::Solution(const std::string& input)
         uint32_t area = 1;
         uint32_t delimeter = 0;
         visitedPart2.insert({p, std::unordered_set<utils::Dir>{}});
-        // printf("Point: %d %d\n", p.x, p.y);
         
         for (auto dir: utils::AllDirs)
         {
             auto newP = p + utils::dirToPointArithmetic.at(dir);
-            // printf("New point: %d %d\n", newP.x, newP.y);
-            // if (grid.isPointInGrid(newP))
-            // {
-                if (grid.isPointInGrid(newP) && grid.getNode(newP.x, newP.y).val == val && !visitedPart2.contains(newP))
+            if (grid.isPointInGrid(newP) && grid.getNode(newP.x, newP.y).val == val && !visitedPart2.contains(newP))
+            {
+                auto [newArea, newDelimeter] = countResultPart2(newP, val);
+                area += newArea;
+                delimeter += newDelimeter;
+            }
+            else if ((grid.isPointInGrid(newP) && grid.getNode(newP.x, newP.y).val != val) || !grid.isPointInGrid(newP))
+            {
+                visitedPart2[p].insert(dir);
+                utils::Dir checkedDirs[2];
+                if (dir == utils::Dir::UP || dir == utils::Dir::DOWN)
                 {
-                    auto [newArea, newDelimeter] = countResultPart2(newP, val);
-                    area += newArea;
-                    delimeter += newDelimeter;
+                    checkedDirs[0] = utils::Dir::LEFT;
+                    checkedDirs[1] = utils::Dir::RIGHT;
                 }
-                else if ((grid.isPointInGrid(newP) && grid.getNode(newP.x, newP.y).val != val) || !grid.isPointInGrid(newP))
+                else
                 {
-                    visitedPart2[p].insert(dir);
-                    utils::Dir checkedDirs[2];
-                    if (dir == utils::Dir::UP || dir == utils::Dir::DOWN)
+                    checkedDirs[0] = utils::Dir::UP;
+                    checkedDirs[1] = utils::Dir::DOWN;
+                }
+                bool additionalSide = true;
+                auto containsNum = 0u;
+                for (auto dir2: checkedDirs)
+                {
+                    auto newP2 = p + utils::dirToPointArithmetic.at(dir2);
+                    if (grid.isPointInGrid(newP2) && grid.getNode(newP2.x, newP2.y).val == val
+                        && visitedPart2.contains(newP2))
                     {
-                        checkedDirs[0] = utils::Dir::LEFT;
-                        checkedDirs[1] = utils::Dir::RIGHT;
-                    }
-                    else
-                    {
-                        checkedDirs[0] = utils::Dir::UP;
-                        checkedDirs[1] = utils::Dir::DOWN;
-                    }
-                    bool additionalSide = true;
-                    for (auto dir2: checkedDirs)
-                    {
-                        auto newP2 = p + utils::dirToPointArithmetic.at(dir2);
-                        if (grid.isPointInGrid(newP2) && grid.getNode(newP2.x, newP2.y).val == val
-                            && visitedPart2.contains(newP2) && visitedPart2[newP2].contains(dir))
+                        if (visitedPart2[newP2].contains(dir))
                         {
                             additionalSide = false;
+                            containsNum++;
                         }
                     }
-                    if (additionalSide)
-                    {
-                        printf("Additional side !!! p = {%d, %d} dir = %s\n", p.x, p.y, utils::dirToString.at(dir).c_str());
-                        delimeter++;
-                    }
                 }
-                
-            // }
-            // else if (!grid.isPointInGrid(newP))
-            // {
-            //     delimeter++;
-            // }
+                if (additionalSide)
+                {
+                    delimeter++;
+                }
+                if (containsNum == 2)
+                {
+                    delimeter--;
+                }
+            }
         }
         return {area, delimeter};
     };
@@ -124,11 +122,11 @@ Solution::Solution(const std::string& input)
             auto p = utils::Point(j, i);
             if (!visitedPart2.contains(p))
             {
-                // auto [area, delimeter] = countResultPart1(p, grid.getNode(j, i).val);
-                auto [area, delimeter] = countResultPart2(p, grid.getNode(j, i).val);
-                printf("Area: %d, delimeter: %d in Zone %c\n", area, delimeter, grid.getNode(j, i).val);
-                resultPart2 += area*delimeter;
-                // return;
+                auto [area1, delimeter1] = countResultPart1(p, grid.getNode(j, i).val);
+                auto [area2, delimeter2] = countResultPart2(p, grid.getNode(j, i).val);
+                // printf("Area: %d, delimeter: %d in Zone %c\n", area2, delimeter2, grid.getNode(j, i).val);
+                resultPart1 += area1*delimeter1;
+                resultPart2 += area2*delimeter2;
             }
         }
     }
@@ -140,7 +138,7 @@ int main()
 {
     TaskTime task;
     Solution example("../inputs/example12.txt");
-    // Solution real("../inputs/input12.txt");
+    Solution real("../inputs/input12.txt");
 
     task.endTaskAndPrintTime();
     return 0;
