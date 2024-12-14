@@ -60,7 +60,11 @@
         "list": "cpp",
         "format": "cpp",
         "set": "cpp",
-        "span": "cpp"
+        "span": "cpp",
+        "charconv": "cpp",
+        "iomanip": "cpp",
+        "text_encoding": "cpp",
+        "variant": "cpp"
     },
     "cmake.configureOnOpen": true,
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
