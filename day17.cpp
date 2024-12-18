@@ -152,7 +152,9 @@ Solution::Solution(const std::string& input)
     // STEP 1
     // prepare first 31 bits (2147483647 = 2^31 - 1) = which is equal to 8 printed digits
     // then we can find the rest about 48-31 = 17 bits (MSB)
-    for (auto j = registerAMin; j <= registerAMin + 2147483647; j++)
+    const auto bitsStep1 = 28u;
+    auto bitsCombinationStep1 = std::pow(2, bitsStep1) - 1;
+    for (auto j = registerAMin; j <= registerAMin + bitsCombinationStep1; j++)
     {
         registerA = j;
         auto iter = 0u;
@@ -183,7 +185,7 @@ Solution::Solution(const std::string& input)
             {
                 break;
             }
-            else if (iter >= 7) // 8 digits musut be quel (7 0-based)
+            else if (iter >= (bitsStep1 - 10)/3) // 8 digits musut be quel (7 0-based)
             {
                 valuesOk8Digits.insert(j - registerAMin);
                 break;
@@ -196,11 +198,13 @@ Solution::Solution(const std::string& input)
     result.clear();
 
     //STEP 2 - find 17 most significant bits - LSB are values hidden in valuesOk8Digits set
-    for (auto j = 0llu; j <= 131071; j++)
+    auto bitsStep2 = 48 - bitsStep1;
+    auto bitsCombinationStep2 = std::pow(2, bitsStep2) - 1;
+    for (auto j = 0llu; j <= bitsCombinationStep2; j++)
     {
         for (auto bits31: valuesOk8Digits)
         {
-            uint64_t valueTested = registerAMin + (j << 31) + bits31;
+            uint64_t valueTested = registerAMin + (j << bitsStep1) + bits31;
 
             registerA = valueTested;
             auto iter = 0u;
