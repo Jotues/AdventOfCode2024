@@ -54,7 +54,21 @@ namespace utils
                 {
                     grid[i].push_back(NodeFromChar(static_cast<int32_t>(j), static_cast<int32_t>(i), data[i][j]));
                 }
-            } 
+            }
+        }
+
+        Grid(const size_t rows, const size_t columns):
+            maxRows(rows),
+            maxColumns(columns)
+        {
+            for (auto i = 0ul; i < maxRows; i++)
+            {
+                grid.push_back(std::vector<NodeFromChar>{});
+                for (auto j = 0ul; j < maxColumns; j++)
+                {
+                    grid[i].push_back(NodeFromChar(static_cast<int32_t>(j), static_cast<int32_t>(i)));
+                }
+            }
         }
 
         NodeFromChar& getNode(const size_t x, const size_t y) { return grid[y][x]; }
@@ -81,7 +95,7 @@ namespace utils
     };
 
     constexpr std::array<Dir, 4> AllDirs = {Dir::UP, Dir::DOWN, Dir::LEFT, Dir::RIGHT};
-    
+
     const std::map<Dir, std::string> dirToString
     {
         {Dir::UP, "UP"},
@@ -92,7 +106,7 @@ namespace utils
 }
 
 template<>
-struct std::hash<utils::Point> 
+struct std::hash<utils::Point>
 {
     size_t operator() (const utils::Point& pt) const
     {
