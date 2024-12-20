@@ -86,6 +86,10 @@ add_executable(day19 day19.cpp)
 target_link_libraries(day19 utils compiler_flags)
 target_include_directories(day19 PUBLIC "${PROJECT_BINARY_DIR}")
 
+add_executable(day20 day20.cpp)
+target_link_libraries(day20 utils compiler_flags)
+target_include_directories(day20 PUBLIC "${PROJECT_BINARY_DIR}")
+
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
